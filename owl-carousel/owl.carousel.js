@@ -396,15 +396,18 @@ if (typeof Object.create !== "function") {
             if (base.options.navigation === true || base.options.pagination === true) {
                 base.owlControls = $("<div class=\"owl-controls\"/>").toggleClass("clickable", !base.browser.isTouch).appendTo(base.$elem);
             }
+            if (base.options.navigation === true) {
+                base.buildPrevButton();
+            }
             if (base.options.pagination === true) {
                 base.buildPagination();
             }
             if (base.options.navigation === true) {
-                base.buildButtons();
+                base.buildNextButton();
             }
         },
 
-        buildButtons : function () {
+        buildPrevButton : function () {
             var base = this,
                 buttonsWrapper = $("<div class=\"owl-buttons\"/>");
             base.owlControls.append(buttonsWrapper);
@@ -413,15 +416,7 @@ if (typeof Object.create !== "function") {
                 "class" : "owl-prev",
                 "html" : base.options.navigationText[0] || ""
             });
-
-            base.buttonNext = $("<div/>", {
-                "class" : "owl-next",
-                "html" : base.options.navigationText[1] || ""
-            });
-
-            buttonsWrapper
-                .append(base.buttonPrev)
-                .append(base.buttonNext);
+            buttonsWrapper.append(base.buttonPrev);
 
             buttonsWrapper.on("touchstart.owlControls mousedown.owlControls", "div[class^=\"owl\"]", function (event) {
                 event.preventDefault();
@@ -429,11 +424,30 @@ if (typeof Object.create !== "function") {
 
             buttonsWrapper.on("touchend.owlControls mouseup.owlControls", "div[class^=\"owl\"]", function (event) {
                 event.preventDefault();
-                if ($(this).hasClass("owl-next")) {
-                    base.next();
-                } else {
-                    base.prev();
-                }
+                base.prev();
+            });
+
+        },
+
+        buildNextButton : function () {
+            var base = this,
+                buttonsWrapper = $("<div class=\"owl-buttons\"/>");
+            base.owlControls.append(buttonsWrapper);
+
+            base.buttonNext = $("<div/>", {
+                "class" : "owl-next",
+                "html" : base.options.navigationText[1] || ""
+            });
+
+            buttonsWrapper.append(base.buttonNext);
+
+            buttonsWrapper.on("touchstart.owlControls mousedown.owlControls", "div[class^=\"owl\"]", function (event) {
+                event.preventDefault();
+            });
+
+            buttonsWrapper.on("touchend.owlControls mouseup.owlControls", "div[class^=\"owl\"]", function (event) {
+                event.preventDefault();
+                base.next();
             });
         },
 
